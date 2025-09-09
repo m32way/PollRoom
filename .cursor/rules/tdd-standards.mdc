@@ -7,11 +7,13 @@ alwaysApply: false
 # Test-Driven Development Standards
 
 ## TDD Process:
+
 1. **Red**: Write a failing test that defines the desired behavior
 2. **Green**: Write minimal code to make the test pass
 3. **Refactor**: Improve code while keeping tests green
 
 ## Testing Requirements:
+
 - Use Jest for unit and integration testing
 - Mock external dependencies (Supabase, KV) in tests
 - Write tests first, then implement features
@@ -19,6 +21,7 @@ alwaysApply: false
 - Use descriptive test names that explain the behavior being tested
 
 ## Test Structure:
+
 - Group related tests with `describe` blocks
 - Use `beforeEach` to set up test data
 - Mock external services consistently
@@ -26,6 +29,7 @@ alwaysApply: false
 - Validate response formats and status codes
 
 ## Mocking Guidelines:
+
 - Mock Supabase client responses
 - Mock KV session management
 - Mock external API calls
