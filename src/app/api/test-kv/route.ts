@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getKvClient, SessionManager, RateLimiter } from "@/lib/kv";
+import { getKvClientSafe, SessionManager, RateLimiter } from "@/lib/kv";
 import { getSessionId, getClientIP, getUserAgent } from "@/lib/utils";
 
 export async function GET(request: NextRequest) {
@@ -7,7 +7,11 @@ export async function GET(request: NextRequest) {
     console.log("🧪 Testing KV connection and session management...");
 
     // Test basic KV connection
-    const client = getKvClient();
+    const client = getKvClientSafe();
+    if (!client) {
+      throw new Error("KV environment variables not configured. Please set up Vercel KV.");
+    }
+
     const testKey = "test:connection";
     const testValue = `test-${Date.now()}`;
     

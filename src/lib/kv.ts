@@ -9,7 +9,7 @@ function getKvClient() {
     const url = process.env.KV_REST_API_URL;
     const token = process.env.KV_REST_API_TOKEN;
     
-    if (!url || !token || url.includes('placeholder') || token.includes('placeholder')) {
+    if (!url || !token || url.includes('placeholder') || token.includes('placeholder') || url.includes('your_')) {
       throw new Error("KV environment variables not configured. Please set up Vercel KV.");
     }
     
@@ -18,7 +18,17 @@ function getKvClient() {
   return kvClient;
 }
 
-export { kv, getKvClient };
+// Safe wrapper that returns null instead of throwing during development
+function getKvClientSafe() {
+  try {
+    return getKvClient();
+  } catch (error) {
+    console.warn("KV client not available:", error instanceof Error ? error.message : "Unknown error");
+    return null;
+  }
+}
+
+export { kv, getKvClient, getKvClientSafe };
 
 // Session management utilities
 export interface SessionData {
@@ -34,6 +44,12 @@ export class SessionManager {
   private static readonly SESSION_TTL = 24 * 60 * 60; // 24 hours in seconds
 
   static async createSession(sessionId: string, metadata?: Partial<SessionData>): Promise<void> {
+    const client = getKvClientSafe();
+    if (!client) {
+      console.warn("KV not available - session not created");
+      return;
+    }
+
     const sessionData: SessionData = {
       id: sessionId,
       createdAt: new Date().toISOString(),
@@ -41,7 +57,6 @@ export class SessionManager {
       ...metadata,
     };
 
-    const client = getKvClient();
     await client.setex(
       `${this.SESSION_PREFIX}${sessionId}`,
       this.SESSION_TTL,
@@ -51,7 +66,12 @@ export class SessionManager {
 
   static async getSession(sessionId: string): Promise<SessionData | null> {
     try {
-      const client = getKvClient();
+      const client = getKvClientSafe();
+      if (!client) {
+        console.warn("KV not available - session not retrieved");
+        return null;
+      }
+      
       const data = await client.get(`${this.SESSION_PREFIX}${sessionId}`);
       if (!data) return null;
       
@@ -84,8 +104,13 @@ export class SessionManager {
     const session = await this.getSession(sessionId);
     if (!session) return;
 
+    const client = getKvClientSafe();
+    if (!client) {
+      console.warn("KV not available - session activity not updated");
+      return;
+    }
+
     session.lastActivity = new Date().toISOString();
-    const client = getKvClient();
     await client.setex(
       `${this.SESSION_PREFIX}${sessionId}`,
       this.SESSION_TTL,
@@ -94,7 +119,11 @@ export class SessionManager {
   }
 
   static async deleteSession(sessionId: string): Promise<void> {
-    const client = getKvClient();
+    const client = getKvClientSafe();
+    if (!client) {
+      console.warn("KV not available - session not deleted");
+      return;
+    }
     await client.del(`${this.SESSION_PREFIX}${sessionId}`);
   }
 
@@ -119,7 +148,16 @@ export class RateLimiter {
     const now = Math.floor(Date.now() / 1000);
 
     try {
-      const client = getKvClient();
+      const client = getKvClientSafe();
+      if (!client) {
+        console.warn("KV not available - rate limiting disabled");
+        return {
+          allowed: true,
+          remaining: maxRequests,
+          resetTime: now + windowSeconds,
+        };
+      }
+
       // Get current count
       const current = await client.get(key);
       const count = current ? parseInt(current as string) : 0;

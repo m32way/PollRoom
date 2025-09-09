@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
-import { EnvironmentValidator, validateEnvironment } from "@/lib/env-validation";
+import {
+  EnvironmentValidator,
+  validateEnvironment,
+} from "@/lib/env-validation";
 
 export async function GET() {
   try {
@@ -22,18 +25,22 @@ export async function GET() {
         config: validation.config,
       },
       recommendations: {
-        nextSteps: validation.isValid 
+        nextSteps: validation.isValid
           ? ["Environment is properly configured", "Ready for development"]
           : [
               "Configure missing environment variables",
               "Update placeholder values with actual credentials",
-              "Refer to setup documentation for guidance"
+              "Refer to setup documentation for guidance",
             ],
-        setupGuide: !validation.isValid ? {
-          supabase: "Create a Supabase project and get your URL and keys",
-          vercelKv: "Create a Vercel KV database and get your connection details",
-          documentation: "See SUPABASE_SETUP.md and VERCEL_KV_SETUP.md for detailed instructions"
-        } : null,
+        setupGuide: !validation.isValid
+          ? {
+              supabase: "Create a Supabase project and get your URL and keys",
+              vercelKv:
+                "Create a Vercel KV database and get your connection details",
+              documentation:
+                "See SUPABASE_SETUP.md and VERCEL_KV_SETUP.md for detailed instructions",
+            }
+          : null,
       },
     });
   } catch (error) {
@@ -53,7 +60,7 @@ export async function GET() {
 export async function POST() {
   try {
     const template = EnvironmentValidator.generateEnvTemplate();
-    
+
     return NextResponse.json({
       success: true,
       message: "Environment template generated",
@@ -62,7 +69,7 @@ export async function POST() {
         "Copy the template above",
         "Replace placeholder values with actual credentials",
         "Save as .env.local in your project root",
-        "Restart your development server"
+        "Restart your development server",
       ],
     });
   } catch (error) {
