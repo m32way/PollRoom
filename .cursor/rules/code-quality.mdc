@@ -1,0 +1,39 @@
+---
+description: Code quality and TypeScript standards for PollRoom
+alwaysApply: true
+---
+
+# Code Quality Standards
+
+## TypeScript:
+- Use strict TypeScript configuration
+- Define proper interfaces and types
+- Use generated database types from Supabase
+- Avoid `any` types - use proper typing
+- Use proper error handling with typed errors
+
+## Next.js 15:
+- Follow App Router patterns
+- Use proper route handler signatures with Promise<params>
+- Implement proper middleware where needed
+- Use server components by default
+
+## Database Operations:
+- Always validate data before database operations
+- Use proper foreign key relationships
+- Handle database errors gracefully
+- Use transactions for complex operations
+- Implement proper indexing
+
+## Performance:
+- Optimize database queries
+- Use proper caching strategies
+- Monitor and log performance metrics
+- Use efficient data structures
+- Implement proper cleanup for subscriptions
+
+## Real-time Features:
+- Use Supabase real-time subscriptions
+- Implement optimistic UI updates
+- Handle connection drops gracefully
+- Use proper cleanup for subscriptions

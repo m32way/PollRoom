@@ -48,7 +48,8 @@ export async function POST(request: NextRequest) {
           {
             success: false,
             error: "Room creation failed",
-            details: "Unable to generate unique room code after multiple attempts",
+            details:
+              "Unable to generate unique room code after multiple attempts",
           },
           { status: 500 }
         );
@@ -81,7 +82,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Create session for room creator
-    const sessionId = request.headers.get("x-session-id") || crypto.randomUUID();
+    const sessionId =
+      request.headers.get("x-session-id") || crypto.randomUUID();
     await SessionManager.createSession(sessionId, {
       roomCode: roomCode,
       role: "creator",

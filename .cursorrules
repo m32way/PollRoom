@@ -1,0 +1,56 @@
+# PollRoom Development Rules
+
+## Documentation Lookup
+- **ALWAYS use Context7 MCP tools for documentation lookup**
+- Use `mcp_context7_resolve-library-id` to find the correct library ID first
+- Then use `mcp_context7_get-library-docs` to get up-to-date documentation
+- This ensures accurate implementation based on current best practices and API specifications
+- Never rely on outdated knowledge when implementing features
+
+## Testing Standards
+- Follow Test-Driven Development (TDD) approach: Red → Green → Refactor
+- Write tests first, then implement the feature
+- Use Jest for unit and integration testing
+- Mock external dependencies (Supabase, KV) in tests
+- Ensure comprehensive test coverage for all API endpoints
+
+## Code Quality
+- Use TypeScript for type safety
+- Follow Next.js 15 App Router patterns
+- Implement proper error handling with consistent response formats
+- Use proper HTTP status codes
+- Validate all inputs and handle edge cases
+
+## API Design
+- Follow RESTful conventions
+- Use consistent response format: `{ success: boolean, data?: any, error?: string, details?: string }`
+- Implement proper validation for all endpoints
+- Use appropriate HTTP status codes (200, 201, 400, 404, 410, 500)
+- Include comprehensive error messages
+
+## Database Operations
+- Always validate data before database operations
+- Use proper TypeScript types from generated database schema
+- Handle database errors gracefully
+- Implement proper foreign key relationships
+- Use transactions for complex operations
+
+## Security
+- Validate all inputs
+- Use session management for user tracking
+- Implement rate limiting
+- Never expose sensitive data in responses
+- Use proper authentication where needed
+
+## Performance
+- Optimize database queries
+- Use proper indexing
+- Implement caching where appropriate
+- Monitor and log performance metrics
+- Use efficient data structures
+
+## Real-time Features
+- Use Supabase real-time subscriptions
+- Implement optimistic UI updates
+- Handle connection drops gracefully
+- Use proper cleanup for subscriptions

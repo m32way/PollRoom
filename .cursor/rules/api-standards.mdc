@@ -1,0 +1,46 @@
+---
+description: API design and implementation standards for PollRoom
+globs: ["**/api/**/*.ts"]
+alwaysApply: false
+---
+
+# API Design Standards
+
+## Response Format:
+Always use consistent response format:
+```typescript
+{
+  success: boolean,
+  data?: any,
+  error?: string,
+  details?: string
+}
+```
+
+## HTTP Status Codes:
+- 200: Success
+- 201: Created
+- 400: Bad Request (validation errors)
+- 404: Not Found
+- 409: Conflict (duplicate votes, etc.)
+- 410: Gone (expired rooms/polls)
+- 500: Internal Server Error
+
+## Validation:
+- Validate all inputs before processing
+- Return clear error messages with details
+- Use proper TypeScript types from database schema
+- Handle edge cases gracefully
+
+## Security:
+- Validate session IDs
+- Check room expiration
+- Prevent duplicate votes per session
+- Sanitize user inputs
+- Use proper authentication where needed
+
+## Error Handling:
+- Log errors with context
+- Return safe error messages (don't expose internals)
+- Use try-catch blocks consistently
+- Handle database errors gracefully

@@ -1,0 +1,21 @@
+---
+description: Always use Context7 MCP tools for documentation lookup to ensure accurate implementation
+alwaysApply: true
+---
+
+# Documentation Lookup Rule
+
+**CRITICAL**: Always use Context7 MCP tools for documentation lookup before implementing features.
+
+## Process:
+1. Use `mcp_context7_resolve-library-id` to find the correct library ID first
+2. Then use `mcp_context7_get-library-docs` to get up-to-date documentation
+3. This ensures accurate implementation based on current best practices and API specifications
+4. Never rely on outdated knowledge when implementing features
+
+## Examples:
+- Before implementing Jest configuration, use Context7 to get current Jest docs
+- Before using Supabase features, check Context7 for latest Supabase documentation
+- Before implementing Next.js features, verify current Next.js patterns via Context7
+
+This rule ensures we always have the most current and accurate documentation for any library or framework we're working with.
