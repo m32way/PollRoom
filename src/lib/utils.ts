@@ -14,7 +14,7 @@ export function generateRoomCode(): string {
   return result;
 }
 
-export function getSessionId(req: Request): string {
+export function getSessionId(_req: Request): string {
   // This will be implemented when we add session management
   // For now, return a placeholder
   return "session-placeholder";

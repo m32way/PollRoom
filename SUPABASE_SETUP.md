@@ -8,6 +8,7 @@ This guide will help you set up the Supabase database for PollRoom.
 2. **Sign up/Login** with your GitHub account
 3. **Click "New Project"**
 4. **Fill in project details**:
+
    - **Name**: `pollroom-mvp`
    - **Database Password**: Generate a strong password (save it!)
    - **Region**: Choose closest to your location
@@ -44,6 +45,7 @@ Once your project is ready:
 ## ⚙️ Step 5: Configure Environment Variables
 
 1. **Copy `.env.example` to `.env.local`**:
+
    ```bash
    cp .env.example .env.local
    ```
@@ -59,11 +61,13 @@ Once your project is ready:
 ## 🧪 Step 6: Test Database Connection
 
 1. **Start the development server**:
+
    ```bash
    npm run dev
    ```
 
 2. **Test the database connection**:
+
    ```bash
    curl http://localhost:3000/api/test-db
    ```
@@ -86,7 +90,7 @@ Once your project is ready:
 1. **Go to Database → Replication** in Supabase dashboard
 2. **Enable real-time** for all tables:
    - `rooms` ✅
-   - `polls` ✅  
+   - `polls` ✅
    - `votes` ✅
 
 ## ✅ Validation Checklist
@@ -101,16 +105,19 @@ Once your project is ready:
 ## 🚨 Troubleshooting
 
 ### Connection Issues
+
 - **Check environment variables** are correctly set
 - **Verify project URL** doesn't have trailing slash
 - **Ensure project is not paused** (free tier limitation)
 
 ### Schema Issues
+
 - **Check SQL script** ran without errors
 - **Verify tables exist** in Table Editor
 - **Check RLS policies** are enabled
 
 ### Real-time Issues
+
 - **Enable replication** for all tables
 - **Check browser console** for WebSocket errors
 - **Verify RLS policies** allow read access
