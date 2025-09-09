@@ -56,3 +56,24 @@ export function getClientIP(req: Request): string {
 export function getUserAgent(req: Request): string {
   return req.headers.get('user-agent') || 'unknown';
 }
+
+export function validateRoomCode(code: string): boolean {
+  return typeof code === 'string' && code.length === 6 && /^[A-Z0-9]+$/.test(code);
+}
+
+export function normalizeRoomCode(code: string): string {
+  return code.toUpperCase().trim();
+}
+
+export function isRoomExpired(expiresAt: string | null): boolean {
+  if (!expiresAt) return true; // If no expiration date, consider expired
+  const now = new Date();
+  const expiration = new Date(expiresAt);
+  return now > expiration;
+}
+
+export function getRoomExpirationTime(): Date {
+  const expiration = new Date();
+  expiration.setHours(expiration.getHours() + 24);
+  return expiration;
+}

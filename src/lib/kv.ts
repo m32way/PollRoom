@@ -8,11 +8,19 @@ function getKvClient() {
   if (!kvClient) {
     const url = process.env.KV_REST_API_URL;
     const token = process.env.KV_REST_API_TOKEN;
-    
-    if (!url || !token || url.includes('placeholder') || token.includes('placeholder') || url.includes('your_')) {
-      throw new Error("KV environment variables not configured. Please set up Vercel KV.");
+
+    if (
+      !url ||
+      !token ||
+      url.includes("placeholder") ||
+      token.includes("placeholder") ||
+      url.includes("your_")
+    ) {
+      throw new Error(
+        "KV environment variables not configured. Please set up Vercel KV."
+      );
     }
-    
+
     kvClient = createClient({ url, token });
   }
   return kvClient;
@@ -23,7 +31,10 @@ function getKvClientSafe() {
   try {
     return getKvClient();
   } catch (error) {
-    console.warn("KV client not available:", error instanceof Error ? error.message : "Unknown error");
+    console.warn(
+      "KV client not available:",
+      error instanceof Error ? error.message : "Unknown error"
+    );
     return null;
   }
 }
@@ -37,13 +48,18 @@ export interface SessionData {
   lastActivity: string;
   ipAddress?: string;
   userAgent?: string;
+  roomCode?: string;
+  role?: "creator" | "participant";
 }
 
 export class SessionManager {
   private static readonly SESSION_PREFIX = "session:";
   private static readonly SESSION_TTL = 24 * 60 * 60; // 24 hours in seconds
 
-  static async createSession(sessionId: string, metadata?: Partial<SessionData>): Promise<void> {
+  static async createSession(
+    sessionId: string,
+    metadata?: Partial<SessionData>
+  ): Promise<void> {
     const client = getKvClientSafe();
     if (!client) {
       console.warn("KV not available - session not created");
@@ -71,31 +87,31 @@ export class SessionManager {
         console.warn("KV not available - session not retrieved");
         return null;
       }
-      
+
       const data = await client.get(`${this.SESSION_PREFIX}${sessionId}`);
       if (!data) return null;
-      
-      if (typeof data === 'string') {
+
+      if (typeof data === "string") {
         return JSON.parse(data) as SessionData;
       }
-      
+
       // If data is already an object, validate it has required properties
-      if (typeof data === 'object' && data !== null) {
+      if (typeof data === "object" && data !== null) {
         const sessionData = data as unknown;
         if (
-          typeof sessionData === 'object' &&
+          typeof sessionData === "object" &&
           sessionData !== null &&
-          'id' in sessionData &&
-          'createdAt' in sessionData &&
-          'lastActivity' in sessionData
+          "id" in sessionData &&
+          "createdAt" in sessionData &&
+          "lastActivity" in sessionData
         ) {
           return sessionData as SessionData;
         }
       }
-      
+
       return null;
     } catch (error) {
-      console.error('Error getting session:', error);
+      console.error("Error getting session:", error);
       return null;
     }
   }
@@ -180,7 +196,7 @@ export class RateLimiter {
         resetTime: now + windowSeconds,
       };
     } catch (error) {
-      console.error('Rate limit check failed:', error);
+      console.error("Rate limit check failed:", error);
       // Fail open - allow request if rate limiting fails
       return {
         allowed: true,
