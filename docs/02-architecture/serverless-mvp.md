@@ -1,5 +1,8 @@
 # PollRoom - Serverless MVP Architecture
 
+<!-- AI-CONTEXT: ESSENTIAL | ARCHITECTURE | DATABASE-SCHEMA | PRIMARY-IMPLEMENTATION -->
+<!-- TAGS: architecture, serverless, mvp, database, schema, implementation, primary -->
+
 ## 🎯 **MVP-First Serverless Strategy**
 
 After careful analysis, a serverless architecture is **optimal for MVP validation** - providing the fastest path to market at $0 cost while maintaining the ability to scale and migrate when needed.
@@ -9,7 +12,7 @@ After careful analysis, a serverless architecture is **optimal for MVP validatio
 ```
 Serverless Architecture:
 - Vercel (Frontend + API): $0/month (free tier)
-- Supabase (Database + Real-time): $0/month (free tier)  
+- Supabase (Database + Real-time): $0/month (free tier)
 - Upstash Redis (Sessions): $0/month (free tier)
 - Total MVP Cost: $0/month
 
@@ -53,7 +56,9 @@ Previous Architecture:
 ## 🔧 **Technology Stack (Serverless-First)**
 
 ### **1. Frontend + API: Vercel**
+
 **Why Vercel for Everything?**
+
 - **Static React hosting**: Free with global CDN
 - **API Routes**: Serverless functions for backend logic
 - **Edge Functions**: Ultra-fast execution at the edge
@@ -61,12 +66,15 @@ Previous Architecture:
 - **Built-in monitoring**: Performance and error tracking
 
 **Free Tier Limits:**
+
 - 100GB bandwidth/month
 - 1000 serverless function executions/day
 - Unlimited static deployments
 
 ### **2. Database + Real-time: Supabase**
+
 **Why Supabase?**
+
 - **PostgreSQL**: Full SQL database with ACID compliance
 - **Real-time subscriptions**: WebSocket-like functionality built-in
 - **Row Level Security**: Built-in authentication and authorization
@@ -74,19 +82,23 @@ Previous Architecture:
 - **Dashboard**: Easy database management UI
 
 **Free Tier Limits:**
+
 - 500MB database storage
 - 2GB bandwidth/month
 - 50MB file storage
 - Unlimited API requests
 
 ### **3. Session Management: Upstash Redis**
+
 **Why Upstash Redis?**
+
 - **Session storage**: Anonymous user session tracking
 - **Rate limiting**: Prevent spam and abuse
 - **Serverless-native**: No connection pooling needed
 - **Global edge**: Low latency worldwide
 
 **Free Tier Limits:**
+
 - 10,000 commands/day
 - 256MB storage
 - Global replication
@@ -94,6 +106,7 @@ Previous Architecture:
 ## 🚀 **Simplified Data Flow**
 
 ### **Room Creation Flow**
+
 ```
 1. User clicks "Create Room" → React component
 2. Frontend calls /api/rooms → Vercel Function
@@ -103,15 +116,17 @@ Previous Architecture:
 ```
 
 ### **Voting Flow**
+
 ```
 1. User votes → React component
-2. Frontend calls /api/votes → Vercel Function  
+2. Frontend calls /api/votes → Vercel Function
 3. Function validates → Saves vote to Supabase
 4. Supabase triggers → Real-time update to all subscribers
 5. Frontend receives → Updates results immediately
 ```
 
 ### **Real-time Updates**
+
 ```
 1. Supabase Database Change → Triggers real-time event
 2. All subscribed clients → Receive update instantly
@@ -158,6 +173,7 @@ pollroom/
 ## 🗃️ **Database Schema (Supabase)**
 
 ### **Simplified Tables**
+
 ```sql
 -- Rooms table
 CREATE TABLE rooms (
@@ -168,7 +184,7 @@ CREATE TABLE rooms (
   expires_at TIMESTAMP WITH TIME ZONE DEFAULT (NOW() + INTERVAL '24 hours')
 );
 
--- Polls table  
+-- Polls table
 CREATE TABLE polls (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   room_id UUID NOT NULL REFERENCES rooms(id) ON DELETE CASCADE,
@@ -212,66 +228,68 @@ CREATE INDEX idx_votes_session ON votes(session_id, poll_id);
 ## 🔥 **API Implementation (Vercel Functions)**
 
 ### **Room Creation API**
+
 ```javascript
 // pages/api/rooms/create.js
-import { supabase } from '../../../lib/supabase'
-import { generateRoomCode } from '../../../lib/utils'
+import { supabase } from "../../../lib/supabase";
+import { generateRoomCode } from "../../../lib/utils";
 
 export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' })
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
   }
 
   try {
-    const { name } = req.body
-    const code = generateRoomCode()
-    
+    const { name } = req.body;
+    const code = generateRoomCode();
+
     const { data, error } = await supabase
-      .from('rooms')
+      .from("rooms")
       .insert({ code, name })
       .select()
-      .single()
-    
-    if (error) throw error
-    
-    res.status(201).json({ room: data })
+      .single();
+
+    if (error) throw error;
+
+    res.status(201).json({ room: data });
   } catch (error) {
-    res.status(500).json({ error: error.message })
+    res.status(500).json({ error: error.message });
   }
 }
 ```
 
 ### **Voting API**
+
 ```javascript
 // pages/api/polls/[id]/vote.js
-import { supabase } from '../../../../lib/supabase'
-import { getSessionId } from '../../../../lib/utils'
+import { supabase } from "../../../../lib/supabase";
+import { getSessionId } from "../../../../lib/utils";
 
 export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' })
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
   }
 
   try {
-    const { id } = req.query
-    const { choice } = req.body
-    const session_id = getSessionId(req)
-    
+    const { id } = req.query;
+    const { choice } = req.body;
+    const session_id = getSessionId(req);
+
     // Upsert vote (handles duplicates automatically)
     const { data, error } = await supabase
-      .from('votes')
-      .upsert({ 
-        poll_id: id, 
-        choice, 
-        session_id 
+      .from("votes")
+      .upsert({
+        poll_id: id,
+        choice,
+        session_id,
       })
-      .select()
-    
-    if (error) throw error
-    
-    res.status(200).json({ vote: data })
+      .select();
+
+    if (error) throw error;
+
+    res.status(200).json({ vote: data });
   } catch (error) {
-    res.status(500).json({ error: error.message })
+    res.status(500).json({ error: error.message });
   }
 }
 ```
@@ -279,54 +297,58 @@ export default async function handler(req, res) {
 ## ⚡ **Real-time Implementation (Supabase)**
 
 ### **Frontend Real-time Subscription**
+
 ```javascript
 // lib/realtime.js
-import { supabase } from './supabase'
+import { supabase } from "./supabase";
 
 export function subscribeToVotes(pollId, onVoteUpdate) {
   return supabase
     .channel(`poll-${pollId}`)
     .on(
-      'postgres_changes',
+      "postgres_changes",
       {
-        event: '*',
-        schema: 'public',
-        table: 'votes',
-        filter: `poll_id=eq.${pollId}`
+        event: "*",
+        schema: "public",
+        table: "votes",
+        filter: `poll_id=eq.${pollId}`,
       },
       onVoteUpdate
     )
-    .subscribe()
+    .subscribe();
 }
 
 // React component usage
 useEffect(() => {
   const subscription = subscribeToVotes(pollId, (payload) => {
     // Update local state with new vote
-    setVotes(current => [...current, payload.new])
-  })
-  
-  return () => subscription.unsubscribe()
-}, [pollId])
+    setVotes((current) => [...current, payload.new]);
+  });
+
+  return () => subscription.unsubscribe();
+}, [pollId]);
 ```
 
 ## 🎯 **MVP Feature Implementation**
 
 ### **Core Features (Simplified)**
+
 1. **Room Creation**: 6-character codes via Vercel Function
 2. **Anonymous Voting**: Session-based tracking with Upstash Redis
 3. **Real-time Results**: Supabase real-time subscriptions
 4. **Mobile-First UI**: React with Tailwind CSS
 
 ### **What We're NOT Building (MVP Simplification)**
+
 - ❌ Custom WebSocket server
-- ❌ Connection pooling management  
+- ❌ Connection pooling management
 - ❌ Complex caching strategies
 - ❌ Custom authentication system
 - ❌ Advanced fraud prevention
 - ❌ Performance optimization
 
 ### **What We Get for Free**
+
 - ✅ Global CDN (Vercel)
 - ✅ Real-time updates (Supabase)
 - ✅ Database management (Supabase)
@@ -337,6 +359,7 @@ useEffect(() => {
 ## 📊 **Performance Expectations (Realistic for MVP)**
 
 ### **Serverless Performance Targets**
+
 - **Vote latency**: 200-500ms (acceptable for MVP)
 - **Concurrent users**: 50-100 simultaneous voters
 - **Page load time**: <3 seconds on mobile
@@ -344,6 +367,7 @@ useEffect(() => {
 - **Uptime**: 99.9% (handled by providers)
 
 ### **When to Consider Migration**
+
 - **>100 concurrent users**: Consider dedicated architecture
 - **<100ms latency required**: Move to performance-first stack
 - **>$50/month costs**: Evaluate cost vs dedicated servers
@@ -352,6 +376,7 @@ useEffect(() => {
 ## 🚀 **Development Speed Benefits**
 
 ### **Faster MVP Development**
+
 - **No Docker setup**: Just npm install and deploy
 - **No server management**: Focus purely on features
 - **Auto-scaling**: No capacity planning needed
@@ -359,6 +384,7 @@ useEffect(() => {
 - **Zero infrastructure**: Deploy with git push
 
 ### **Reduced Complexity**
+
 - **No WebSocket servers**: Supabase handles real-time
 - **No connection pooling**: Serverless handles scaling
 - **No caching layer**: Start simple, add if needed
@@ -367,12 +393,14 @@ useEffect(() => {
 ## 🛡️ **Security (Built-in)**
 
 ### **Supabase Security Features**
+
 - **Row Level Security**: Built-in data protection
 - **API authentication**: Automatic API key management
 - **SQL injection protection**: Parameterized queries
 - **Rate limiting**: Built-in request limiting
 
 ### **Vercel Security Features**
+
 - **HTTPS by default**: SSL certificates included
 - **Edge security**: DDoS protection
 - **Environment variables**: Secure config management
@@ -380,18 +408,21 @@ useEffect(() => {
 ## 📈 **Scaling Strategy**
 
 ### **Phase 1: MVP Validation (Serverless)**
+
 - Cost: $0/month
 - Users: 0-100 concurrent
 - Features: Core polling functionality
 - Focus: Product-market fit
 
 ### **Phase 2: Growth (Hybrid)**
+
 - Cost: $20-50/month
 - Users: 100-500 concurrent
 - Features: Analytics, advanced polls
 - Approach: Serverless + paid tiers
 
 ### **Phase 3: Scale (Dedicated)**
+
 - Cost: $100+/month
 - Users: 500+ concurrent
 - Features: Enterprise features
@@ -400,12 +431,14 @@ useEffect(() => {
 ## 🎯 **Success Metrics (MVP)**
 
 ### **Validation Metrics**
+
 - **User engagement**: % of room participants who vote
 - **Session completion**: % of polls that get responses
 - **Return usage**: % of users who create multiple rooms
 - **Performance satisfaction**: User feedback on speed
 
 ### **Technical Metrics**
+
 - **Serverless function success rate**: >99%
 - **Database response time**: <1 second
 - **Real-time update delay**: <3 seconds
@@ -414,6 +447,7 @@ useEffect(() => {
 ## 🏁 **Getting Started (Simplified)**
 
 ### **Setup Steps**
+
 1. **Create accounts**: Vercel, Supabase, Upstash (all free)
 2. **Clone template**: Use serverless starter template
 3. **Configure environment**: Set API keys and connection strings
@@ -421,6 +455,7 @@ useEffect(() => {
 5. **Test**: Verify all features work in production
 
 ### **Development Workflow**
+
 1. **Local development**: Use Supabase local development
 2. **API testing**: Test serverless functions locally
 3. **Database changes**: Apply migrations via Supabase CLI
@@ -441,5 +476,5 @@ useEffect(() => {
 
 ---
 
-*Serverless MVP Architecture created: December 2024*  
-*Optimized for fastest validation at lowest cost*
+_Serverless MVP Architecture created: December 2024_  
+_Optimized for fastest validation at lowest cost_

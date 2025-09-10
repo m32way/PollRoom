@@ -34,3 +34,7 @@ alwaysApply: false
 - Mock KV session management
 - Mock external API calls
 - Use realistic test data that matches production schemas
+
+## end-to-end tests
+
+- e2e tests must adhere to the guidelines in https://playwright.dev/docs/best-practices

@@ -1,6 +1,7 @@
 # 💻 Implementation Documentation
 
 ## ⚡ **TL;DR - Development Context**
+
 **3-day serverless implementation** with **Context7 MCP** guidance. Structured development process with validation checkpoints and research-based learning.
 
 **Tools**: Next.js + Supabase + Vercel deployment. **Process**: Setup → API → UI → Real-time → Deploy.
@@ -8,46 +9,37 @@
 ## 🎯 **Context Selection for Development**
 
 ### **🚀 Quick Start (First-Time Developers)**
+
 1. **Read**: [development-rules.md](./development-rules.md) 🔧 **ESSENTIAL FIRST**
 2. **Follow**: [serverless-implementation.md](./serverless-implementation.md) (3-day guide)
 3. **Reference**: [linear-tickets.md](./linear-tickets.md) for task tracking
 
 ### **📚 Complete Implementation Context**
 
-| Document | Purpose | When to Use | Complexity |
-|----------|---------|-------------|------------|
-| **[development-rules.md](./development-rules.md)** | 🔧 **Context engineering rules** | Before any development work | ⭐ |
-| **[serverless-implementation.md](./serverless-implementation.md)** | 3-day MVP implementation guide | Active serverless development | ⭐⭐ |
-| **[step-by-step-guide.md](./step-by-step-guide.md)** | 12-day performance-first guide | Future scale implementation | ⭐⭐⭐⭐ |
-| **[local-development.md](./local-development.md)** | Local environment setup | Development environment | ⭐⭐ |
-| **[linear-tickets.md](./linear-tickets.md)** | Project management tickets | Task tracking and planning | ⭐⭐ |
+| Document                                                           | Purpose                          | When to Use                   | Complexity |
+| ------------------------------------------------------------------ | -------------------------------- | ----------------------------- | ---------- |
+| **[development-rules.md](./development-rules.md)**                 | 🔧 **Context engineering rules** | Before any development work   | ⭐         |
+| **[serverless-implementation.md](./serverless-implementation.md)** | 3-day MVP implementation guide   | Active serverless development | ⭐⭐       |
+| **[step-by-step-guide.md](./step-by-step-guide.md)**               | 12-day performance-first guide   | Future scale implementation   | ⭐⭐⭐⭐   |
+| **[local-development.md](./local-development.md)**                 | Local environment setup          | Development environment       | ⭐⭐       |
+| **[linear-tickets.md](./linear-tickets.md)**                       | Project management tickets       | Task tracking and planning    | ⭐⭐       |
 
 ## 🧠 **Context Engineering for Development**
 
-### **When to Use Context7 MCP Server**
-```
-✅ REQUIRED CONTEXTS:
-- Learning new technologies (Next.js, Supabase, Vercel)
-- Complex feature implementation (real-time, sessions)
-- Performance optimization and security
-- API integration and error handling
+### **Tool Usage Guidelines**
 
-❌ DON'T USE FOR:
-- Basic project setup (npm install, git init)
-- General programming concepts
-- Project-specific business logic
-- Simple debugging
-```
+See [development-rules.md](./development-rules.md) for complete Context7 MCP usage rules and development guidelines.
 
-### **Development Decision Framework**
-1. **Check Documentation**: Is this covered in our implementation guides?
-2. **Assess Complexity**: Simple task or requires external knowledge?
-3. **Use Context7**: For learning, complex features, best practices
-4. **Document Decisions**: Update development rules with learnings
+### **Quick Reference**
+
+- **Navigation**: [../NAVIGATION.md](../NAVIGATION.md) - Complete documentation navigation
+- **Development Rules**: [development-rules.md](./development-rules.md) - Essential development guidelines
+- **Implementation Guide**: [serverless-implementation.md](./serverless-implementation.md) - 3-day MVP guide
 
 ## 📋 **Implementation Roadmap Context**
 
 ### **Phase 1: Foundation (Day 1)**
+
 ```
 Setup Context:
 ├── Project foundation (GitHub, Next.js, dependencies)
@@ -61,6 +53,7 @@ Context Sources:
 ```
 
 ### **Phase 2: Core Features (Day 2)**
+
 ```
 API Context:
 ├── Room management (create, join, codes)
@@ -75,6 +68,7 @@ Context Sources:
 ```
 
 ### **Phase 3: Frontend & Deployment (Day 3)**
+
 ```
 UI Context:
 ├── Mobile-first components (Tailwind CSS)
@@ -91,6 +85,7 @@ Context Sources:
 ## 🔧 **Development Tools Context**
 
 ### **Required Development Stack**
+
 ```bash
 # Core Framework
 Next.js 15        # React framework with App Router
@@ -109,6 +104,7 @@ Vercel MCP        # Deployment and monitoring
 ```
 
 ### **Context Engineering Workflow**
+
 1. **Plan Task**: Check implementation guides for context
 2. **Research**: Use Context7 MCP for unfamiliar technologies
 3. **Implement**: Follow development rules and patterns
@@ -118,21 +114,25 @@ Vercel MCP        # Deployment and monitoring
 ## 🎯 **Context Isolation by Development Phase**
 
 ### **Infrastructure Context**
+
 - **Local Setup**: [local-development.md](./local-development.md)
 - **Environment**: Supabase + Vercel accounts and configuration
 - **Dependencies**: Package.json with exact versions
 
 ### **Backend Context**
+
 - **Database**: Schema design and Row-Level Security policies
 - **API Routes**: REST endpoints for rooms, polls, votes
 - **Sessions**: Anonymous user tracking with Vercel KV
 
 ### **Frontend Context**
+
 - **Components**: Reusable UI components with Tailwind
 - **State Management**: Zustand for client state
 - **Real-time**: Supabase subscriptions for live updates
 
 ### **Testing Context**
+
 - **User Scenarios**: Test against all user stories
 - **Performance**: Validate latency and mobile experience
 - **Cross-browser**: Ensure compatibility across devices
@@ -140,12 +140,13 @@ Vercel MCP        # Deployment and monitoring
 ## 📊 **Development Quality Context**
 
 ### **Code Quality Standards**
+
 ```typescript
 // Context: Clean, typed, documented code
 interface PollData {
   id: string;
   question: string;
-  type: 'yes-no' | 'rating' | 'multiple-choice';
+  type: "yes-no" | "rating" | "multiple-choice";
   options?: string[];
 }
 
@@ -154,12 +155,13 @@ try {
   const result = await createPoll(pollData);
   return { success: true, data: result };
 } catch (error) {
-  console.error('Poll creation failed:', error);
+  console.error("Poll creation failed:", error);
   return { success: false, error: error.message };
 }
 ```
 
 ### **Testing Standards**
+
 - **Unit Tests**: Core business logic (vote validation, room codes)
 - **Integration**: API endpoints with database operations
 - **E2E Tests**: Complete user scenarios from user stories
@@ -168,18 +170,21 @@ try {
 ## 🚀 **Next Steps by Experience Level**
 
 ### **👶 Junior Developers**
+
 1. **Start**: [development-rules.md](./development-rules.md) - Learn the rules
 2. **Follow**: [serverless-implementation.md](./serverless-implementation.md) - Step-by-step
 3. **Use**: Context7 MCP for learning new technologies
 4. **Validate**: Test against user stories frequently
 
 ### **👨‍💻 Senior Developers**
+
 1. **Review**: [development-rules.md](./development-rules.md) - Understand standards
 2. **Plan**: [linear-tickets.md](./linear-tickets.md) - Task breakdown
 3. **Optimize**: Focus on performance and security contexts
 4. **Mentor**: Help junior developers with context selection
 
 ### **🏗️ Team Leads**
+
 1. **Strategy**: Choose serverless vs performance-first route
 2. **Planning**: Break down work using Linear tickets
 3. **Quality**: Ensure adherence to development rules
@@ -187,4 +192,4 @@ try {
 
 ---
 
-*Implementation context optimized for efficient development workflow and learning*
+_Implementation context optimized for efficient development workflow and learning_
