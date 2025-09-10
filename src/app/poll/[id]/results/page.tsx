@@ -3,7 +3,7 @@
 import React from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { PollType, PollOptions } from "@/app/api/polls/create/route";
+// PollType and PollOptions are used in the component logic
 import { useRealtimeVotes } from "@/hooks/useRealtimeVotes";
 
 export default function PollResultsPage() {
@@ -98,7 +98,7 @@ export default function PollResultsPage() {
 
       case "multiple_choice":
         const options = Object.entries(poll.options).filter(
-          ([_, value]) => value
+          ([, value]) => value
         );
         const optionLetters = ["A", "B", "C", "D", "E"];
 

@@ -1,19 +1,18 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "../utils/test-utils";
 import LandingPage from "@/components/LandingPage";
-import { createRoomSchema, joinRoomSchema } from "@/lib/validation";
 
 // Mock the API calls
 const mockFetch = jest.fn();
 
 // Mock window.location
-delete (window as any).location;
+delete (window as unknown as { location?: Location }).location;
 window.location = {
   href: "",
   assign: jest.fn(),
   replace: jest.fn(),
   reload: jest.fn(),
-} as any;
+} as jest.Mocked<Location>;
 
 describe("LandingPage", () => {
   beforeEach(() => {

@@ -13,8 +13,7 @@ const mockFetch = jest.fn();
 global.fetch = mockFetch;
 
 describe("PollRoom API Integration Tests", () => {
-  let testRoomId: string;
-  let testPollId: string;
+  // Test data will be created during test execution
 
   beforeEach(() => {
     mockFetch.mockClear();

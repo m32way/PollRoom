@@ -1,6 +1,5 @@
 import React, { ReactElement } from "react";
 import { render, RenderOptions } from "@testing-library/react";
-import { NextRequest } from "next/server";
 
 // Mock Next.js router
 jest.mock("next/navigation", () => ({

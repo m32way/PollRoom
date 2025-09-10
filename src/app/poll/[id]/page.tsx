@@ -174,7 +174,7 @@ export default function PollVotingPage() {
 
       case "multiple_choice":
         const options = Object.entries(poll.options).filter(
-          ([_, value]) => value
+          ([, value]) => value
         );
         const optionLetters = ["A", "B", "C", "D", "E"];
 
